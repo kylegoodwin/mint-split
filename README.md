@@ -1,3 +1,5 @@
+Starter code grabbed from here https://github.com/martellaj/chrome-extension-react-typescript-boilerplate
+
 # Chrome Extension (built with TypeScript + React)
 
 > This project is a boilerplate project to allow you to quickly build chrome extensions using TypeScript and React.
