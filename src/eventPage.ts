@@ -1,4 +1,19 @@
 import Papa from 'papaparse';
+import Transaction from './Transaction';
+import {DateTime, DateTimeFormatOptions, DateTimeOptions} from 'luxon';
+
+
+
+
+interface RawTable{
+        date: string,
+        description: string,
+        originalDescription: string,
+        amount: string,
+        transactionType: string,
+        category: string,
+        accountName: string
+}
 
 // Listen to messages sent from other parts of the extension.
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -53,13 +68,21 @@ function getSingleItemFromSearch(items: chrome.downloads.DownloadItem[]): chrome
 }
 
 function executeDownload(): void {
-    // fetch("https://mint.intuit.com/transactionDownload.event?queryNew=&offset=0&filterType=cash&comparableType=8").then(response => {
-    //     console.log(response);
-    // })
+
     Papa.parse("https://mint.intuit.com/transactionDownload.event?queryNew=&offset=0&filterType=cash&comparableType=8", {
         download: true,
+        header: true,
+        transformHeader:fixKey,
         complete: function (results) {
-            console.log(results);
+            const transactions = results.data.filter(value => {
+                let n = value as RawTable
+                return (DateTime.fromFormat(n.date ,"M/dd/yyyy").startOf('day').diffNow('days').days * -1) < 60;
+            })
+            chrome.storage.local.set({transactionTable: transactions});
         }
     });
+}
+
+function fixKey(str: string): string {
+    return (str.charAt(0).toLowerCase() + str.slice(1)).replace(/ /g,'');
 }

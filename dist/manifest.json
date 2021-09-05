@@ -19,7 +19,8 @@
         "128": "icon128.png"
     },
     "permissions": [
-        "downloads"
+        "downloads",
+        "storage"
       ],
     "content_scripts": [
         {
