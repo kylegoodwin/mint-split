@@ -1,7 +1,9 @@
+import Papa from 'papaparse';
+
 // Listen to messages sent from other parts of the extension.
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-   
-    if(request.type === "test-download"){
+
+    if (request.type === "test-download") {
         executeDownload();
     }
 
@@ -50,8 +52,14 @@ function getSingleItemFromSearch(items: chrome.downloads.DownloadItem[]): chrome
     return items[0] ? items[0] : null
 }
 
-function executeDownload() : void{
-    fetch("https://mint.intuit.com/transactionDownload.event?queryNew=&offset=0&filterType=cash&comparableType=8").then(response => {
-        console.log(response);
-    })
+function executeDownload(): void {
+    // fetch("https://mint.intuit.com/transactionDownload.event?queryNew=&offset=0&filterType=cash&comparableType=8").then(response => {
+    //     console.log(response);
+    // })
+    Papa.parse("https://mint.intuit.com/transactionDownload.event?queryNew=&offset=0&filterType=cash&comparableType=8", {
+        download: true,
+        complete: function (results) {
+            console.log(results);
+        }
+    });
 }
