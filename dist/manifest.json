@@ -18,7 +18,9 @@
         "48": "icon48.png",
         "128": "icon128.png"
     },
-    "permissions": [],
+    "permissions": [
+        "downloads"
+      ],
     "content_scripts": [
         {
             "matches": [
@@ -28,5 +30,6 @@
                 "js/content.js"
             ]
         }
-    ]
+    ],
+    "options_page": "options.html"
 }
