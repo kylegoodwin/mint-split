@@ -1,6 +1,7 @@
 import Papa from 'papaparse';
 import Transaction from './Transaction';
 import {DateTime, DateTimeFormatOptions, DateTimeOptions} from 'luxon';
+import MessageType from './MessageType';
 
 
 
@@ -69,16 +70,21 @@ function getSingleItemFromSearch(items: chrome.downloads.DownloadItem[]): chrome
 
 function executeDownload(): void {
 
-    Papa.parse("https://mint.intuit.com/transactionDownload.event?queryNew=&offset=0&filterType=cash&comparableType=8", {
+    chrome.runtime.sendMessage({type: MessageType.TransactionsLoading})
+
+    Papa.parse<Transaction>("https://mint.intuit.com/transactionDownload.event?queryNew=&offset=0&filterType=cash&comparableType=8", {
         download: true,
         header: true,
         transformHeader:fixKey,
         complete: function (results) {
+           
             const transactions = results.data.filter(value => {
-                let n = value as RawTable
-                return (DateTime.fromFormat(n.date ,"M/dd/yyyy").startOf('day').diffNow('days').days * -1) < 60;
+                return (DateTime.fromFormat(value.date ,"M/dd/yyyy").startOf('day').diffNow('days').days * -1) < 60;
             })
+
+
             chrome.storage.local.set({transactionTable: transactions});
+            chrome.runtime.sendMessage({type: MessageType.TransactionsLoaded})
         }
     });
 }
