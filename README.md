@@ -2,15 +2,15 @@
 Building a chrome extension to automate the manual labor I have been doing to split expenses with my partner. Requires you to log in to Mint.com and have it tracking your various accounts. The goal is to have a table where you can just select the transactions you would like to split with a checkbox, and have this extension output a split total with a breakdown as a table.
 
 TODO:
-[x] Pull data from mint.com
-[x] Display all transactions on a table
-[ ] Allow transactions to be selected
-[ ] Do math to split the tab
-[ ] Exportable receipt of split transactions
-[ ] Keep track of last transaction so you know where to start for the next tab
+- [x] Pull data from mint.com
+- [x] Display all transactions on a table
+- [ ] Allow transactions to be selected
+- [ ] Do math to split the tab
+- [ ] Exportable receipt of split transactions
+- [ ] Keep track of last transaction so you know where to start for the next tab
 
 Future Ideas:
-[ ] Paste output straight into google doc using Google Drive API
+- [ ] Paste output straight into google doc using Google Drive API
 
 Starter code grabbed from here https://github.com/martellaj/chrome-extension-react-typescript-boilerplate
 
