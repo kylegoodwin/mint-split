@@ -1,5 +1,6 @@
 import React, { useEffect,useState } from "react";
 import Transaction from "../Transaction";
+import TransactionsTable from './Table';
 
 const App = () : JSX.Element => {
 
@@ -8,13 +9,15 @@ const App = () : JSX.Element => {
     useEffect(()=>{
         chrome.storage.local.get(['transactionTable'], function(result) {
             // console.log(result);
-            setTransactions(result.transactionTable);
+            setTransactions(result.transactionTable.map((each : Transaction,index : number) => {
+                return { ...each, id: index}
+            }));
           });
     },[])
 
   return (<div>
-      <h1> App goes here</h1>
-      <p>{transactions.length}</p>
+      <h1>Transaction Table</h1>
+      {transactions.length > 0 && <TransactionsTable rows={transactions} />}
     </div>)
   }
 
