@@ -3,9 +3,6 @@ import Transaction from './Transaction';
 import {DateTime, DateTimeFormatOptions, DateTimeOptions} from 'luxon';
 import MessageType from './MessageType';
 
-
-
-
 interface RawTable{
         date: string,
         description: string,
@@ -72,16 +69,17 @@ function executeDownload(): void {
 
     chrome.runtime.sendMessage({type: MessageType.TransactionsLoading})
 
-    Papa.parse<Transaction>("https://mint.intuit.com/transactionDownload.event?queryNew=&offset=0&filterType=cash&comparableType=8", {
+    Papa.parse<RawTable>("https://mint.intuit.com/transactionDownload.event?queryNew=&offset=0&filterType=cash&comparableType=8", {
         download: true,
         header: true,
         transformHeader:fixKey,
         complete: function (results) {
            
-            const transactions = results.data.filter(value => {
+            const transactions: Transaction[] = results.data.filter(value => {
                 return (DateTime.fromFormat(value.date ,"M/dd/yyyy").startOf('day').diffNow('days').days * -1) < 60;
+            }).map( rawTransaction => { 
+                return {...rawTransaction, amount: parseFloat(rawTransaction.amount)} as Transaction
             })
-
 
             chrome.storage.local.set({transactionTable: transactions});
             chrome.runtime.sendMessage({type: MessageType.TransactionsLoaded})

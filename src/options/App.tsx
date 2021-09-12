@@ -8,7 +8,6 @@ const App = () : JSX.Element => {
 
     useEffect(()=>{
         chrome.storage.local.get(['transactionTable'], function(result) {
-            // console.log(result);
             setTransactions(result.transactionTable.map((each : Transaction,index : number) => {
                 return { ...each, id: index}
             }));
