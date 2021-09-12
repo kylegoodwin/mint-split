@@ -1,0 +1,16 @@
+.filters-container{
+    & > *{
+        margin-right: 1em;
+    }
+
+    button{
+        display: flex;
+        align-items: center;
+        background-color: none;
+        justify-content: center;
+
+        svg{
+            padding: 0;
+        }
+    }
+}
