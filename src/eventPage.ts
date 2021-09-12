@@ -1,17 +1,8 @@
 import Papa from 'papaparse';
-import Transaction from './Transaction';
-import {DateTime, DateTimeFormatOptions, DateTimeOptions} from 'luxon';
+import Transaction from './models/Transaction';
+import {DateTime} from 'luxon';
 import MessageType from './MessageType';
-
-interface RawTable{
-        date: string,
-        description: string,
-        originalDescription: string,
-        amount: string,
-        transactionType: string,
-        category: string,
-        accountName: string
-}
+import RawTable from './models/RawTable';
 
 // Listen to messages sent from other parts of the extension.
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -23,47 +14,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // onMessage must return "true" if response is async.
     let isResponseAsync = false;
 
-    if (request.popupMounted) {
-        console.log('eventPage notified that Popup.tsx has mounted.');
-    }
-
-
     return isResponseAsync;
 });
-
-
-chrome.downloads.onCreated.addListener(handleNewDownload);
-
-function handleNewDownload(item: chrome.downloads.DownloadItem) {
-    console.log(item);
-}
-
-
-//Intercept a finished download 
-chrome.downloads.onChanged.addListener(handleDownloadsChange)
-
-function handleDownloadsChange(event: chrome.downloads.DownloadDelta): void {
-
-    console.log(event);
-    if (event.state?.current === "complete") {
-        console.log("Download has finished");
-        console.log(event);
-
-        const query: chrome.downloads.DownloadQuery = { id: event.id }
-
-        let item: chrome.downloads.DownloadItem | null = null;
-        chrome.downloads.search(query, (items: chrome.downloads.DownloadItem[]) => {
-            item = getSingleItemFromSearch(items)
-        });
-
-        console.log(item);
-    }
-}
-
-function getSingleItemFromSearch(items: chrome.downloads.DownloadItem[]): chrome.downloads.DownloadItem | null {
-    console.log(items[0]);
-    return items[0] ? items[0] : null
-}
 
 function executeDownload(): void {
 
@@ -78,7 +30,7 @@ function executeDownload(): void {
             const transactions: Transaction[] = results.data.filter(value => {
                 return (DateTime.fromFormat(value.date ,"M/dd/yyyy").startOf('day').diffNow('days').days * -1) < 60;
             }).map( rawTransaction => { 
-                return {...rawTransaction, amount: parseFloat(rawTransaction.amount)} as Transaction
+                return {...rawTransaction, amount: parseFloat(rawTransaction.amount)* (rawTransaction.transactionType === "debit" ? 1 : -1)} as Transaction
             })
 
             chrome.storage.local.set({transactionTable: transactions});

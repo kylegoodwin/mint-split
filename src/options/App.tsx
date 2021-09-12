@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from "react";
-import Transaction from "../Transaction";
+import Transaction from "../models/Transaction";
 import TransactionsTable from './Table';
 
 const App = () : JSX.Element => {

@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "Chase scrape",
-    "description": "A boilerplate project to quickly build a Chrome extension using TypeScript and React (built using webpack).",
-    "version": "1.0.0",
+    "name": "Mint Split",
+    "description": "Pick transacitons you would like to split with someone else and generate a summary",
+    "version": "0.2",
     "browser_action": {
         "default_icon": "icon16.png",
         "default_popup": "popup.html"
@@ -19,7 +19,6 @@
         "128": "icon128.png"
     },
     "permissions": [
-        "downloads",
         "storage"
       ],
     "content_scripts": [

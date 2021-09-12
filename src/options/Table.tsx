@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid, GridColDef, GridRowId, GridValueGetterParams } from '@material-ui/data-grid';
-import Transaction from '../Transaction';
+import Transaction from '../models/Transaction';
 import { useState } from 'react';
 import Grid from '@material-ui/core/Grid'
 
@@ -8,7 +8,7 @@ const simpleColumns: GridColDef[] = [
     {
         field: 'date',
         headerName: 'Date',
-        width: 150,
+        width: 75,
     },
     {
         field: 'originalDescription',
