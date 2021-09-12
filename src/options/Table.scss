@@ -4,13 +4,61 @@
     }
 
     button{
+
         display: flex;
         align-items: center;
-        background-color: none;
+        background-color: white;
         justify-content: center;
+        border-radius: 5px;
+
+        color: green;
 
         svg{
             padding: 0;
+            font-size: 1.25em;
         }
+    }
+    margin-bottom: 1em;
+}
+
+.output-tables table{
+    font-size: 14px;
+    font-family: Helvetica, sans-serif;
+    text-align: left;
+    table-layout: fixed;
+    width: 100%;
+
+    tr td,tr th{
+        padding: 5px;
+    }
+
+    th{
+        border: none;
+        padding: 0;
+        margin-bottom: .5em;
+        background-color: lightgray;
+    }
+}
+
+#output-table tbody{
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+#output-table tbody{
+    display: block;
+}
+
+#output-table thead{
+    display: flex;
+    width: 100%;
+
+    tr{
+        width: 100%;
+        display: flex;
+    }
+
+    tr th{
+        flex: 1 1 0;
     }
 }

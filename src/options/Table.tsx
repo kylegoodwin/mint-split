@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DataGrid, GridColDef} from '@material-ui/data-grid';
+import { DataGrid, GridColDef } from '@material-ui/data-grid';
 import Transaction from '../models/Transaction';
 import { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
@@ -43,12 +43,13 @@ type TableProps = {
 
 type Filters = {
     credits: boolean
+    citiBike: boolean
 }
 
 export default function DataGridDemo({ rows }: TableProps) {
 
     const [selectedRows, setSelectedRows] = useState<Transaction[]>([]);
-    const [filters, setFilters] = useState<Filters>({ credits: true });
+    const [filters, setFilters] = useState<Filters>({ credits: true, citiBike: false });
 
     const getTotal = (): number => {
         let total: number = 0.0;
@@ -58,8 +59,23 @@ export default function DataGridDemo({ rows }: TableProps) {
         return total;
     }
 
+    const applyFilters = (transaction : Transaction) => {
+
+        let shouldFilter = false;
+
+        if (filters.credits) {
+            shouldFilter = transaction.transactionType === "credit"
+        } 
+        
+        if(filters.citiBike && !shouldFilter){
+            shouldFilter = transaction.originalDescription.includes("CITI BIKE");
+        }
+
+        return !shouldFilter;
+    }
+
     const copyTable = () => {
-        const elTable = document.querySelector('#output-table');
+        const elTable = document.querySelector('.output-tables');
 
         let range, sel;
 
@@ -88,29 +104,21 @@ export default function DataGridDemo({ rows }: TableProps) {
         }
     }
 
-    const filteredRows = rows.filter(transaction => {
-        if (filters.credits) {
-            return transaction.transactionType !== "credit"
-        } else {
-            return true;
-        }
-    })
-
-
-    getTotal();
-
     return (
         <>
             <Grid container>
                 <Grid className="filters-container" container>
                     <p>Filters: </p>
-                    <button onClick={()=>{setFilters({credits: !filters.credits})}}>
-                        {filters.credits ? <Check /> : <Clear /> }
+                    <button onClick={() => { setFilters({...filters, credits: !filters.credits }) }}>
+                        {filters.credits ? <Check /> : <Clear />}
                         Credit Transactions</button>
+                        <button onClick={() => { setFilters({...filters, citiBike: !filters.citiBike }) }}>
+                        {filters.citiBike ? <Check /> : <Clear />}
+                        Citi Bikes</button>
                 </Grid>
                 <div style={{ height: 800, width: '50%' }}>
                     <DataGrid
-                        rows={filteredRows}
+                        rows={rows.filter(applyFilters)}
                         columns={columns}
                         checkboxSelection
                         onRowClick={(stuff, event) => {
@@ -125,38 +133,33 @@ export default function DataGridDemo({ rows }: TableProps) {
                     />
 
                 </div>
-                <div style={{ height: 800, width: '40%', marginLeft: "2em" }}>
-                    Output
-                    {/* <DataGrid
-                rows={selectedRows}
-                columns={simpleColumns}
-            /> */}
+                <div className="output-tables" style={{ height: 800, width: '40%', marginLeft: "2em" }}>
                     <table id="output-table">
-                        <tr>
-                            <th>Name</th>
-                            <th>Amount</th>
-                        </tr>
-                        {selectedRows.map(each => {
-                            return <tr>
-                                <td>{each.originalDescription}</td>
-                                <td>{each.amount}</td>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
                             </tr>
-                        })}
+                        </thead>
+                        <tbody>
+                            {selectedRows.map(each => {
+                                return <tr>
+                                    <td>{each.originalDescription}</td>
+                                    <td>{each.amount}</td>
+                                </tr>
+                            })}
+                        </tbody>
+                    </table>
+                    <table>
                         <tr>
-                            <th>Totals</th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>Full: {getTotal().toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>Split: {(getTotal() / 2).toFixed(2)}</td>
+                            <th>Total</th>
+                            <th>{getTotal().toFixed(2)}</th>
                         </tr>
                     </table>
+                    <Grid container>
+                        <button onClick={copyTable}>Copy to clipboard</button>
+                    </Grid>
                 </div>
-                <button onClick={copyTable}>Copy table</button>
             </Grid>
         </>
     );
