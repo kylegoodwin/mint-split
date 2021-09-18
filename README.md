@@ -4,9 +4,9 @@ Building a chrome extension to automate the manual labor I have been doing to sp
 TODO:
 - [x] Pull data from mint.com
 - [x] Display all transactions on a table
-- [ ] Allow transactions to be selected
+- [x] Allow transactions to be selected
 - [ ] Do math to split the tab
-- [ ] Exportable receipt of split transactions
+- [x] Exportable receipt of split transactions
 - [ ] Keep track of last transaction so you know where to start for the next tab
 
 Future Ideas:
