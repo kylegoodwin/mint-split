@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import "./Table.scss";
 import Check from '@material-ui/icons/Check';
 import Clear from '@material-ui/icons/Clear';
+import { copyTable } from '../utility/tabel-utilities';
 
 const simpleColumns: GridColDef[] = [
     {
@@ -81,35 +82,11 @@ export default function DataGridDemo({ rows }: TableProps) {
         return !shouldFilter;
     }
 
-    const copyTable = () => {
-        const elTable = document.querySelector('.output-tables');
-
-        let range, sel;
-
-        // Ensure that range and selection are supported by the browsers
-        if (document.createRange && window.getSelection) {
-
-            range = document.createRange();
-            sel = window.getSelection();
-            // unselect any element in the page
-            if (sel && elTable) {
-                sel.removeAllRanges();
-                try {
-                    range.selectNodeContents(elTable);
-                    sel.addRange(range);
-                } catch (e) {
-                    range.selectNode(elTable);
-                    sel.addRange(range);
-                }
-                document.execCommand('copy');
-                sel.removeAllRanges();
-            }
-        }
+    const copyOutputTable = () => {
+        copyTable('.output-tables');
     }
 
-    return (
-        <>
-            <Grid container>
+    return (<Grid container>
                 <div style={{ height: 700, width: '50%' }}>
                     <h2>Recent Transaction </h2>
                     <Grid className="filters-container" container>
@@ -163,10 +140,8 @@ export default function DataGridDemo({ rows }: TableProps) {
                         </thead>
                     </table>
                     <Grid container>
-                        <button onClick={copyTable}>Copy to clipboard</button>
+                        <button onClick={copyOutputTable}>Copy to clipboard</button>
                     </Grid>
                 </div>
-            </Grid>
-        </>
-    );
+            </Grid>);
 }
