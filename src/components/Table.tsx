@@ -55,6 +55,10 @@ export default function DataGridDemo({ rows }: TableProps) {
     const [selectedRows, setSelectedRows] = useState<Transaction[]>([]);
     const [filters, setFilters] = useState<Filters>({ credits: true, citiBike: false, metroCard: false });
 
+    // const sortedSelectedRows = React.useMemo(()=> {
+    //     return (selectedRows.sort())
+    // }, [selectedRows])
+
     const getTotal = (): number => {
         let total: number = 0.0;
         selectedRows.forEach(selectedTransaction => {
@@ -67,15 +71,15 @@ export default function DataGridDemo({ rows }: TableProps) {
 
         let shouldFilter = false;
 
-        if (filters.credits) {
+        if (filters.credits && transaction.transactionType) {
             shouldFilter = transaction.transactionType === "credit"
         }
 
-        if (filters.citiBike && !shouldFilter) {
+        if (filters.citiBike && !shouldFilter && transaction.originalDescription) {
             shouldFilter = transaction.originalDescription.includes("CITI BIKE");
         }
 
-        if (filters.metroCard && !shouldFilter) {
+        if (filters.metroCard && !shouldFilter && transaction.originalDescription) {
             shouldFilter = transaction.originalDescription.includes("MTA*NYCT");
         }
 
@@ -97,7 +101,7 @@ export default function DataGridDemo({ rows }: TableProps) {
                     </Grid>
                     <div style={{height: "100%"}} >
                         <DataGrid
-                            rows={rows.filter(applyFilters)}
+                            rows={rows.filter(applyFilters).map(e => {return{...e,id: e.index}})}
                             columns={columns}
                             checkboxSelection
                             onRowClick={(stuff, event) => {
@@ -124,7 +128,7 @@ export default function DataGridDemo({ rows }: TableProps) {
                         </thead>
                         <tbody>
                             {selectedRows.map(each => {
-                                return <tr>
+                                return <tr key={each.index}>
                                     <td>{each.originalDescription}</td>
                                     <td>{each.amount}</td>
                                 </tr>

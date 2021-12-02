@@ -14,10 +14,10 @@ export default function executeDownload(): void {
         transformHeader: fixKey,
         complete: function (results) {
            
-            const transactions: Transaction[] = results.data.filter(value => {
-                return (DateTime.fromFormat(value.date ,"M/dd/yyyy").startOf('day').diffNow('days').days * -1) < 60;
-            }).map( rawTransaction => { 
-                return {...rawTransaction, amount: parseFloat(rawTransaction.amount)* (rawTransaction.transactionType === "debit" ? 1 : -1)} as Transaction
+            //Stop filtering the list
+            //filter(value => {return (DateTime.fromFormat(value.date ,"M/dd/yyyy").startOf('day').diffNow('days').days * -1) < 60;})
+            let transactions: Transaction[] = results.data.map( (rawTransaction,i) => { 
+                return {...rawTransaction, amount: parseFloat(rawTransaction.amount)* (rawTransaction.transactionType === "debit" ? 1 : -1), index: results.data.length - i} as Transaction
             })
             chrome.storage.local.set({transactionTable: transactions});
             chrome.runtime.sendMessage({type: MessageType.TransactionsLoaded})
