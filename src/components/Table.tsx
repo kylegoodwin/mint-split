@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
-import Transaction from '../models/Transaction';
+import Transaction from '../types/Transaction';
 import { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import "./Table.scss";
@@ -110,30 +110,34 @@ export default function DataGridDemo({ rows }: TableProps) {
     return (
         <>
             <Grid container>
-                <Grid className="filters-container" container>
-                    <p>Filters: </p>
-                    <button onClick={() => { setFilters({ ...filters, credits: !filters.credits }) }}>{filters.credits ? <Check /> : <Clear />}Credit Transactions</button>
-                    <button onClick={() => { setFilters({ ...filters, citiBike: !filters.citiBike }) }}>{filters.citiBike ? <Check /> : <Clear />}Citi Bikes</button>
-                    <button onClick={() => { setFilters({ ...filters, metroCard: !filters.metroCard }) }}>{filters.metroCard ? <Check /> : <Clear />}MetroCard</button>
-                </Grid>
                 <div style={{ height: 700, width: '50%' }}>
-                    <DataGrid
-                        rows={rows.filter(applyFilters)}
-                        columns={columns}
-                        checkboxSelection
-                        onRowClick={(stuff, event) => {
-                            //Prevents need for double click to select
-                            event.preventDefault();
-                        }}
-                        onSelectionModelChange={(newSelectionModel) => {
-                            setSelectedRows(newSelectionModel.map(rowId => {
-                                return rows[rowId as number]
-                            }));
-                        }}
-                    />
+                    <h2>Recent Transaction </h2>
+                    <Grid className="filters-container" container>
+                        <p>Filters: </p>
+                        <button onClick={() => { setFilters({ ...filters, credits: !filters.credits }) }}>{filters.credits ? <Check /> : <Clear />}Credit Transactions</button>
+                        <button onClick={() => { setFilters({ ...filters, citiBike: !filters.citiBike }) }}>{filters.citiBike ? <Check /> : <Clear />}Citi Bikes</button>
+                        <button onClick={() => { setFilters({ ...filters, metroCard: !filters.metroCard }) }}>{filters.metroCard ? <Check /> : <Clear />}MetroCard</button>
+                    </Grid>
+                    <div style={{height: "100%"}} >
+                        <DataGrid
+                            rows={rows.filter(applyFilters)}
+                            columns={columns}
+                            checkboxSelection
+                            onRowClick={(stuff, event) => {
+                                //Prevents need for double click to select
+                                event.preventDefault();
+                            }}
+                            onSelectionModelChange={(newSelectionModel) => {
+                                setSelectedRows(newSelectionModel.map(rowId => {
+                                    return rows[rowId as number]
+                                }));
+                            }}
+                        />
 
+                    </div>
                 </div>
                 <div className="output-tables" style={{ height: 800, width: '40%', marginLeft: "2em" }}>
+                    <h2>Stuff to Split</h2>
                     <table id="output-table">
                         <thead>
                             <tr>
@@ -152,10 +156,10 @@ export default function DataGridDemo({ rows }: TableProps) {
                     </table>
                     <table>
                         <thead>
-                        <tr>
-                            <th>Total</th>
-                            <th>{getTotal().toFixed(2)}</th>
-                        </tr>
+                            <tr>
+                                <th>Total</th>
+                                <th>{getTotal().toFixed(2)}</th>
+                            </tr>
                         </thead>
                     </table>
                     <Grid container>

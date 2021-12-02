@@ -1,8 +1,8 @@
 import Papa from 'papaparse';
-import Transaction from './models/Transaction';
+import Transaction from './types/Transaction';
 import {DateTime} from 'luxon';
-import MessageType from './MessageType';
-import RawTable from './models/RawTable';
+import MessageType from './types/MessageType';
+import RawTable from './types/RawTable';
 
 // Listen to messages sent from other parts of the extension.
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {

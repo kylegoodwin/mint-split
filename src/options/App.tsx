@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from "react";
-import Transaction from "../models/Transaction";
-import TransactionsTable from './Table';
+import Transaction from "../types/Transaction";
+import TransactionsTable from '../components/Table';
 
 const App = () : JSX.Element => {
 
@@ -15,7 +15,6 @@ const App = () : JSX.Element => {
     },[])
 
   return (<div>
-      <h1>Transaction Table</h1>
       {transactions.length > 0 && <TransactionsTable rows={transactions} />}
     </div>)
   }

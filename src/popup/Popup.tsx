@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Popup.scss";
-import Message from "../Message";
-import MessageType from "../MessageType";
+import Message from "../types/Message";
+import MessageType from "../types/MessageType";
 
 const Popup = (): JSX.Element => {
 
@@ -26,6 +26,7 @@ const Popup = (): JSX.Element => {
   return (<div className="popupContainer">
     {loadingTransactions && <p>Transactions Loading</p>}
     Processs mint transations
+    <a target="blank" href="https://accounts.intuit.com/index.html">Open Mint to start download </a>
     <button onClick={() => { chrome.runtime.sendMessage({ type: "test-download" }) }}>
       Try Download
     </button>
