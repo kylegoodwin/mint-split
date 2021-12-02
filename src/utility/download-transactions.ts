@@ -17,7 +17,7 @@ export default function executeDownload(): void {
             //Stop filtering the list
             //filter(value => {return (DateTime.fromFormat(value.date ,"M/dd/yyyy").startOf('day').diffNow('days').days * -1) < 60;})
             let transactions: Transaction[] = results.data.map( (rawTransaction,i) => { 
-                return {...rawTransaction, amount: parseFloat(rawTransaction.amount)* (rawTransaction.transactionType === "debit" ? 1 : -1), index: results.data.length - i} as Transaction
+                return {...rawTransaction, amount: parseFloat(rawTransaction.amount)* (rawTransaction.transactionType === "debit" ? 1 : -1), index: results.data.length - i, id: i} as Transaction
             })
             chrome.storage.local.set({transactionTable: transactions});
             chrome.runtime.sendMessage({type: MessageType.TransactionsLoaded})

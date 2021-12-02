@@ -56,7 +56,7 @@ export default function DataGridDemo({ rows }: TableProps) {
     const [filters, setFilters] = useState<Filters>({ credits: true, citiBike: false, metroCard: false });
 
     // const sortedSelectedRows = React.useMemo(()=> {
-    //     return (selectedRows.sort())
+    //     return (selectedRows.sort( (a,b) => {return a.index - b.index }))
     // }, [selectedRows])
 
     const getTotal = (): number => {
@@ -101,7 +101,7 @@ export default function DataGridDemo({ rows }: TableProps) {
                     </Grid>
                     <div style={{height: "100%"}} >
                         <DataGrid
-                            rows={rows.filter(applyFilters).map(e => {return{...e,id: e.index}})}
+                            rows={rows.filter(applyFilters)}
                             columns={columns}
                             checkboxSelection
                             onRowClick={(stuff, event) => {

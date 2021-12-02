@@ -1,4 +1,5 @@
 export default interface Transaction{
+        id: number,
         index: number,
         date: string,
         originalDescription: string,
