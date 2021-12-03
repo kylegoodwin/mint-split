@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import "./Table.scss";
 import Check from '@material-ui/icons/Check';
 import Clear from '@material-ui/icons/Clear';
-import { copyTable } from '../utility/tabel-utilities';
+import { copyTable } from '../utility/table-utilities';
 
 const simpleColumns: GridColDef[] = [
     {
@@ -87,7 +87,7 @@ export default function DataGridDemo({ rows }: TableProps) {
     }
 
     const copyOutputTable = () => {
-        copyTable('.output-tables');
+        copyTable('#output-data');
     }
 
     return (<Grid container>
@@ -119,6 +119,7 @@ export default function DataGridDemo({ rows }: TableProps) {
                 </div>
                 <div className="output-tables" style={{ height: 800, width: '40%', marginLeft: "2em" }}>
                     <h2>Stuff to Split</h2>
+                    <div id="output-data">
                     <table id="output-table">
                         <thead>
                             <tr>
@@ -143,6 +144,7 @@ export default function DataGridDemo({ rows }: TableProps) {
                             </tr>
                         </thead>
                     </table>
+                    </div>
                     <Grid container>
                         <button onClick={copyOutputTable}>Copy to clipboard</button>
                     </Grid>

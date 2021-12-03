@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Transaction from "../types/Transaction";
 import TransactionsTable from '../components/Table';
+import { Box } from "@material-ui/core";
 
 class ErrorBoundary extends React.Component {
   constructor(props: any) {
@@ -43,7 +44,7 @@ const App = (): JSX.Element => {
   }, [])
 
   return (<ErrorBoundary>
-    <div>{transactions.length > 0 && <TransactionsTable rows={transactions} />}</div>
+    <Box style={{boxSizing: "border-box"}} padding="1em">{transactions.length > 0 && <TransactionsTable rows={transactions} />}</Box>
   </ErrorBoundary>
   )
 }
