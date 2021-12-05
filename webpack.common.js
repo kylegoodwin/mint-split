@@ -1,4 +1,6 @@
 const path = require("path");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const isDevelopment = process.env.NODE_ENV !== 'production'
 
 module.exports = {
   entry: {
@@ -20,16 +22,36 @@ module.exports = {
       },
       {
         exclude: /node_modules/,
-        test: /\.scss$/,
-        use: [
+        test: /\.module\.s(a|c)ss$/,
+        loader: [
+          isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
           {
-            loader: "style-loader" // Creates style nodes from JS strings
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              sourceMap: isDevelopment
+            }
           },
           {
-            loader: "css-loader" // Translates CSS into CommonJS
-          },
+            loader: 'sass-loader',
+            options: {
+              sourceMap: isDevelopment
+            }
+          }
+        ]
+      },
+      {
+        exclude: /node_modules/,
+        test: /\.s(a|c)ss$/,
+        exclude: /\.module.(s(a|c)ss)$/,
+        loader: [
+          isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
           {
-            loader: "sass-loader" // Compiles Sass to CSS
+            loader: 'sass-loader',
+            options: {
+              sourceMap: isDevelopment
+            }
           }
         ]
       }
@@ -37,5 +59,12 @@ module.exports = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"]
-  }
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: isDevelopment ? '[name].css' : '[name].[hash].css',
+      chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css'
+    })
+  ]
+
 };

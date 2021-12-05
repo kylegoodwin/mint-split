@@ -95,7 +95,7 @@ export default function DataGridDemo({ rows }: TableProps) {
     return (<Grid container>
                 <div style={{ height: 700, width: '50%' }}>
                     <h2>Recent Transaction </h2>
-                    <Grid className="filters-container" container>
+                    <Grid container>
                         <p>Filters: </p>
                         {/* <button onClick={() => { setFilters({ ...filters, credits: !filters.credits }) }}>{filters.credits ? <Check /> : <Clear />}Credit Transactions</button>
                         <button onClick={() => { setFilters({ ...filters, citiBike: !filters.citiBike }) }}>{filters.citiBike ? <Check /> : <Clear />}Citi Bikes</button>
