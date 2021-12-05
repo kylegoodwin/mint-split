@@ -1,3 +1,7 @@
+.MuiDataGrid-root .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer {
+    display: none;
+}
+
 .filters-container{
     & > *{
         margin-right: 1em;

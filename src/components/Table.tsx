@@ -7,6 +7,8 @@ import "./Table.scss";
 import Check from '@material-ui/icons/Check';
 import Clear from '@material-ui/icons/Clear';
 import { copyTable } from '../utility/table-utilities';
+import Filter from './Filter';
+import { Subway } from '@material-ui/icons';
 
 const simpleColumns: GridColDef[] = [
     {
@@ -43,7 +45,7 @@ const columns: GridColDef[] = [
 type TableProps = {
     rows: Transaction[]
 }
-
+interface BoolMap {[key: string]: boolean}
 type Filters = {
     credits: boolean
     citiBike: boolean
@@ -53,7 +55,7 @@ type Filters = {
 export default function DataGridDemo({ rows }: TableProps) {
 
     const [selectedRows, setSelectedRows] = useState<Transaction[]>([]);
-    const [filters, setFilters] = useState<Filters>({ credits: true, citiBike: false, metroCard: false });
+    const [filters, setFilters] = useState<BoolMap>({ credits: true, citiBike: false, metroCard: false });
 
     // const sortedSelectedRows = React.useMemo(()=> {
     //     return (selectedRows.sort( (a,b) => {return a.index - b.index }))
@@ -95,12 +97,15 @@ export default function DataGridDemo({ rows }: TableProps) {
                     <h2>Recent Transaction </h2>
                     <Grid className="filters-container" container>
                         <p>Filters: </p>
-                        <button onClick={() => { setFilters({ ...filters, credits: !filters.credits }) }}>{filters.credits ? <Check /> : <Clear />}Credit Transactions</button>
+                        {/* <button onClick={() => { setFilters({ ...filters, credits: !filters.credits }) }}>{filters.credits ? <Check /> : <Clear />}Credit Transactions</button>
                         <button onClick={() => { setFilters({ ...filters, citiBike: !filters.citiBike }) }}>{filters.citiBike ? <Check /> : <Clear />}Citi Bikes</button>
-                        <button onClick={() => { setFilters({ ...filters, metroCard: !filters.metroCard }) }}>{filters.metroCard ? <Check /> : <Clear />}MetroCard</button>
+                        <button onClick={() => { setFilters({ ...filters, metroCard: !filters.metroCard }) }}>{filters.metroCard ? <Check /> : <Clear />}MetroCard</button> */}
+                        <Filter filters={filters} setFilters={setFilters} type="metroCard" icon={<Subway />} text="Metro Card" />
                     </Grid>
                     <div style={{height: "100%"}} >
                         <DataGrid
+                            hideFooterRowCount
+                            hideFooterSelectedRowCount
                             rows={rows.filter(applyFilters)}
                             columns={columns}
                             checkboxSelection
