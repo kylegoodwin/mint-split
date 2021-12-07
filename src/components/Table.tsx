@@ -95,16 +95,28 @@ export default function DataGridDemo({ rows }: TableProps) {
     const copyOutputTable = () => {
         copyTable('#output-data');
     }
-
+    
     const [showFilters, setShowFilters] = useState<boolean>(false);
+
+    const handleVisible = () => {
+        if(!showFilters){
+            setShowFilters(true);
+        }
+    }
+
+    const handleHide = () => {
+        if(showFilters){
+            setShowFilters(false);
+        }
+    }
 
     return (<Grid container>
         <div style={{ height: 700, width: '50%' }}>
             <h2>Recent Transaction </h2>
             <Grid style={{ padding: ".5em 0" }} container>
-                <div style={{ position: "relative" }}>
-                    <Button onClick={() => { setShowFilters(!showFilters) }} style={{ textTransform: "capitalize" }} variant="outlined">Filters <KeyboardArrowDown /></Button>
-                    {showFilters && <div  style={{position: "absolute", bottom: "-260px", width: "300px", height: "250px", backgroundColor: "white", borderRadius: "10px", border: "solid 2px lightgray", zIndex: 2}}>
+                <div onMouseEnter={handleVisible} onMouseLeave={handleHide} style={{ position: "relative" }}>
+                    <Button style={{ textTransform: "capitalize" }} variant="outlined">Filters <KeyboardArrowDown /></Button>
+                    {showFilters && <div style={{position: "absolute", bottom: "-250px", width: "300px", height: "250px", backgroundColor: "white", borderRadius: "10px", border: "solid 2px lightgray", zIndex: 2}}>
                         <p>Filters: </p>
                         <button onClick={() => { setFilters({ ...filters, credits: !filters.credits }) }}>{filters.credits ? <Check /> : <Clear />}Credit Transactions</button>
                         <button onClick={() => { setFilters({ ...filters, citiBike: !filters.citiBike }) }}>{filters.citiBike ? <Check /> : <Clear />}Citi Bikes</button>

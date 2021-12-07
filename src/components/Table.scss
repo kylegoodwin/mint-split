@@ -1,14 +1,19 @@
+@import "lib/style";
+
+* {
+    @include basic-text();
+}
+
 .MuiDataGrid-root .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer {
     display: none;
 }
 
-.filters-container{
-    & > *{
+.filters-container {
+    & > * {
         margin-right: 1em;
     }
 
-    button{
-
+    button {
         display: flex;
         align-items: center;
         background-color: white;
@@ -19,7 +24,7 @@
 
         color: green;
 
-        svg{
+        svg {
             padding: 0;
             font-size: 1.25em;
         }
@@ -27,51 +32,54 @@
     margin-bottom: 1em;
 }
 
-.output-tables table{
+.output-tables table {
     font-size: 14px;
     font-family: Helvetica, sans-serif;
     text-align: left;
     table-layout: fixed;
     width: 100%;
 
-    tr td,tr th{
-        &:nth-of-type(2){
+    tr td,
+    tr th {
+        &:nth-of-type(2) {
             text-align: right;
         }
         padding: 10px;
     }
 
-
-    th{
+    th {
         font-weight: normal;
         padding: 0;
         border-bottom: solid 1px darkgray;
     }
 
-    thead, tbody{
+    thead,
+    tbody {
         width: 100%;
 
-        tr{
+        tr {
             width: 100%;
             display: flex;
         }
-    
-        tr th:first-of-type, tr td:first-of-type{
+
+        tr th:first-of-type,
+        tr td:first-of-type {
             flex: 1 1 0;
         }
-    
-        tr th:last-of-type, tr td:last-of-type{
+
+        tr th:last-of-type,
+        tr td:last-of-type {
             width: 200px;
         }
     }
 }
 
-#output-table tbody{
+#output-table tbody {
     height: 70vh;
     overflow-y: scroll;
 }
 
-#output-table tbody{
+#output-table tbody {
     display: block;
 }
 
