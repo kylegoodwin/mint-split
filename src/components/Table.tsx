@@ -8,7 +8,8 @@ import Check from '@material-ui/icons/Check';
 import Clear from '@material-ui/icons/Clear';
 import { copyTable } from '../utility/table-utilities';
 import Filter from './Filter';
-import { Subway } from '@material-ui/icons';
+import { KeyboardArrowDown, Subway } from '@material-ui/icons';
+import Button from '@material-ui/core/Button';
 
 const simpleColumns: GridColDef[] = [
     {
@@ -45,7 +46,7 @@ const columns: GridColDef[] = [
 type TableProps = {
     rows: Transaction[]
 }
-interface BoolMap {[key: string]: boolean}
+interface BoolMap { [key: string]: boolean }
 type Filters = {
     credits: boolean
     citiBike: boolean
@@ -92,67 +93,74 @@ export default function DataGridDemo({ rows }: TableProps) {
         copyTable('#output-data');
     }
 
-    return (<Grid container>
-                <div style={{ height: 700, width: '50%' }}>
-                    <h2>Recent Transaction </h2>
-                    <Grid container>
-                        <p>Filters: </p>
-                        {/* <button onClick={() => { setFilters({ ...filters, credits: !filters.credits }) }}>{filters.credits ? <Check /> : <Clear />}Credit Transactions</button>
-                        <button onClick={() => { setFilters({ ...filters, citiBike: !filters.citiBike }) }}>{filters.citiBike ? <Check /> : <Clear />}Citi Bikes</button>
-                        <button onClick={() => { setFilters({ ...filters, metroCard: !filters.metroCard }) }}>{filters.metroCard ? <Check /> : <Clear />}MetroCard</button> */}
-                        <Filter filters={filters} setFilters={setFilters} type="metroCard" icon={<Subway />} text="Metro Card" />
-                    </Grid>
-                    <div style={{height: "100%"}} >
-                        <DataGrid
-                            hideFooterRowCount
-                            hideFooterSelectedRowCount
-                            rows={rows.filter(applyFilters)}
-                            columns={columns}
-                            checkboxSelection
-                            onRowClick={(stuff, event) => {
-                                //Prevents need for double click to select
-                                event.preventDefault();
-                            }}
-                            onSelectionModelChange={(newSelectionModel) => {
-                                setSelectedRows(newSelectionModel.map(rowId => {
-                                    return rows[rowId as number]
-                                }));
-                            }}
-                        />
+    const [showFilters, setShowFilters] = useState<boolean>(false);
 
-                    </div>
+    return (<Grid container>
+        <div style={{ height: 700, width: '50%' }}>
+            <h2>Recent Transaction </h2>
+            <Grid style={{ padding: ".5em 0" }} container>
+                <div style={{ position: "relative" }}>
+                    <Button onClick={() => { setShowFilters(!showFilters) }} style={{ textTransform: "capitalize" }} variant="outlined">Filters <KeyboardArrowDown /></Button>
+                    {showFilters && <div  style={{position: "absolute", bottom: "-260px", width: "300px", height: "250px", backgroundColor: "white", borderRadius: "10px", border: "solid 2px lightgray", zIndex: 2}}>
+                        <p>Filters: </p>
+                        <button onClick={() => { setFilters({ ...filters, credits: !filters.credits }) }}>{filters.credits ? <Check /> : <Clear />}Credit Transactions</button>
+                        <button onClick={() => { setFilters({ ...filters, citiBike: !filters.citiBike }) }}>{filters.citiBike ? <Check /> : <Clear />}Citi Bikes</button>
+                        <button onClick={() => { setFilters({ ...filters, metroCard: !filters.metroCard }) }}>{filters.metroCard ? <Check /> : <Clear />}MetroCard</button>
+                        {/* <Filter filters={filters} setFilters={setFilters} type="metroCard" icon={<Subway />} text="Metro Card" /> */}
+                    </div>}
                 </div>
-                <div className="output-tables" style={{ height: 800, width: '40%', marginLeft: "2em" }}>
-                    <h2>Stuff to Split</h2>
-                    <div id="output-data">
-                    <table id="output-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Amount</th>
+            </Grid>
+            <div style={{ height: "100%" }} >
+                <DataGrid
+                    hideFooterRowCount
+                    hideFooterSelectedRowCount
+                    rows={rows.filter(applyFilters)}
+                    columns={columns}
+                    checkboxSelection
+                    onRowClick={(stuff, event) => {
+                        //Prevents need for double click to select
+                        event.preventDefault();
+                    }}
+                    onSelectionModelChange={(newSelectionModel) => {
+                        setSelectedRows(newSelectionModel.map(rowId => {
+                            return rows[rowId as number]
+                        }));
+                    }}
+                />
+
+            </div>
+        </div>
+        <div className="output-tables" style={{ height: 800, width: '40%', marginLeft: "2em" }}>
+            <h2>Stuff to Split</h2>
+            <div id="output-data">
+                <table id="output-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {selectedRows.map(each => {
+                            return <tr key={each.index}>
+                                <td>{each.originalDescription}</td>
+                                <td>{each.amount}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {selectedRows.map(each => {
-                                return <tr key={each.index}>
-                                    <td>{each.originalDescription}</td>
-                                    <td>{each.amount}</td>
-                                </tr>
-                            })}
-                        </tbody>
-                    </table>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Total</th>
-                                <th>{getTotal().toFixed(2)}</th>
-                            </tr>
-                        </thead>
-                    </table>
-                    </div>
-                    <Grid container>
-                        <button onClick={copyOutputTable}>Copy to clipboard</button>
-                    </Grid>
-                </div>
-            </Grid>);
+                        })}
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Total</th>
+                            <th>{getTotal().toFixed(2)}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <Grid container>
+                <button onClick={copyOutputTable}>Copy to clipboard</button>
+            </Grid>
+        </div>
+    </Grid>);
 }
