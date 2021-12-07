@@ -10,6 +10,9 @@ import { copyTable } from '../utility/table-utilities';
 import Filter from './Filter';
 import { KeyboardArrowDown, Subway } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
+import Clipboard from '@material-ui/icons/FileCopy'
+import { Box } from '@material-ui/core';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
 const simpleColumns: GridColDef[] = [
     {
@@ -158,8 +161,10 @@ export default function DataGridDemo({ rows }: TableProps) {
                     </thead>
                 </table>
             </div>
-            <Grid container>
-                <button onClick={copyOutputTable}>Copy to clipboard</button>
+            <Grid style={{padding: "1em 0"}} container>
+                <Button variant="outlined" style={{textTransform: "capitalize"}} onClick={copyOutputTable}><Clipboard />Copy to clipboard</Button>
+                <Box width=".5em" />
+                <Button variant="outlined" style={{textTransform: "capitalize"}} ><AssignmentTurnedInIcon />Finalize Group</Button>
             </Grid>
         </div>
     </Grid>);
