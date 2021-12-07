@@ -110,8 +110,8 @@ export default function DataGridDemo({ rows }: TableProps) {
         }
     }
 
-    return (<Grid container>
-        <div style={{ height: 700, width: '50%' }}>
+    return (<Grid wrap="nowrap" container>
+        <div style={{ height: 700, flexGrow: 1}}>
             <h2>Recent Transaction </h2>
             <Grid style={{ padding: ".5em 0" }} container>
                 <div onMouseEnter={handleVisible} onMouseLeave={handleHide} style={{ position: "relative" }}>
@@ -145,20 +145,20 @@ export default function DataGridDemo({ rows }: TableProps) {
 
             </div>
         </div>
-        <div className="output-tables" style={{ height: 800, width: '40%', marginLeft: "2em" }}>
+        <div className="output-tables" style={{ flexGrow: 0, marginLeft: "2em" }}>
             <h2>Stuff to Split</h2>
             <div id="output-data">
                 <table id="output-table">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Description</th>
                             <th>Amount</th>
                         </tr>
                     </thead>
                     <tbody>
                         {selectedRows.map(each => {
                             return <tr key={each.index}>
-                                <td>{each.originalDescription}</td>
+                                <td className="description">{each.originalDescription}</td>
                                 <td>{each.amount}</td>
                             </tr>
                         })}
