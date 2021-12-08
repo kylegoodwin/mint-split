@@ -6,7 +6,6 @@ module.exports = {
   entry: {
     popup: path.join(__dirname, "src/popup/index.tsx"),
     eventPage: path.join(__dirname, "src/eventPage.ts"),
-    content: path.join(__dirname, "src/content.ts"),
     options: path.join(__dirname, "src/options/index.tsx"),
   },
   output: {

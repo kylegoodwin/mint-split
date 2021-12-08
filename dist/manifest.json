@@ -21,15 +21,5 @@
     "permissions": [
         "storage"
       ],
-    "content_scripts": [
-        {
-            "matches": [
-                "*://*/*"
-            ],
-            "js": [
-                "js/content.js"
-            ]
-        }
-    ],
     "options_page": "options.html"
 }
