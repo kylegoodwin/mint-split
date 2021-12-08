@@ -50,20 +50,15 @@ type TableProps = {
     rows: Transaction[]
 }
 interface BoolMap { [key: string]: boolean }
-type Filters = {
-    credits: boolean
-    citiBike: boolean
-    metroCard: boolean
-}
 
 export default function DataGridDemo({ rows }: TableProps) {
 
     const [selectedRows, setSelectedRows] = useState<Transaction[]>([]);
     const [filters, setFilters] = useState<BoolMap>({ credits: true, citiBike: false, metroCard: false });
 
-    // const sortedSelectedRows = React.useMemo(()=> {
-    //     return (selectedRows.sort( (a,b) => {return a.index - b.index }))
-    // }, [selectedRows])
+    const sortedSelectedRows = React.useMemo(()=> {
+        return (selectedRows.sort( (a,b) => {return a.index - b.index }))
+    }, [selectedRows])
 
     const getTotal = (): number => {
         let total: number = 0.0;
@@ -156,7 +151,7 @@ export default function DataGridDemo({ rows }: TableProps) {
                         </tr>
                     </thead>
                     <tbody>
-                        {selectedRows.map(each => {
+                        {sortedSelectedRows.map(each => {
                             return <tr key={each.index}>
                                 <td className="description">{each.originalDescription}</td>
                                 <td>{each.amount}</td>
