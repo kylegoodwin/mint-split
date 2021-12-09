@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useMemo} from 'react';
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
 import Transaction from '../types/Transaction';
 import { useState } from 'react';
@@ -7,13 +7,15 @@ import "./Table.scss";
 import Check from '@material-ui/icons/Check';
 import Clear from '@material-ui/icons/Clear';
 import { copyTable } from '../utility/table-utilities';
-import Filter from './Filter';
 import { KeyboardArrowDown, Subway } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Clipboard from '@material-ui/icons/FileCopy'
 import { Box } from '@material-ui/core';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AddFilter from './AddFilter';
+import defaultFilters from '../utility/default-filters';
+import Filter from '../types/Filter';
+import FilterButton from './Filter'
 
 const simpleColumns: GridColDef[] = [
     {
@@ -55,44 +57,31 @@ interface BoolMap { [key: string]: boolean }
 export default function DataGridDemo({ rows }: TableProps) {
 
     const [selectedRows, setSelectedRows] = useState<Transaction[]>([]);
-    const [filters, setFilters] = useState<BoolMap>({ credits: true, citiBike: false, metroCard: false });
+    const [activeFilters, setActiveFilters] = useState<Filter[]>([]);
+    const [possibleFilters,setPossibleFilters] = useState<Filter[]>(defaultFilters);
 
     const sortedSelectedRows = React.useMemo(() => {
         return (selectedRows.sort((a, b) => { return a.index - b.index }))
     }, [selectedRows])
 
     const getTotal = (): number => {
-        let total: number = 0.0;
+        let total: number = 0.0
         selectedRows.forEach(selectedTransaction => {
             total += selectedTransaction.amount;
         })
         return total;
     }
 
-    const applyFilters = (transaction: Transaction) => {
-
-        let shouldFilter = false;
-
-        if (filters.credits && transaction.transactionType) {
-            shouldFilter = transaction.transactionType === "credit"
-        }
-
-        if (filters.citiBike && !shouldFilter && transaction.originalDescription) {
-            shouldFilter = transaction.originalDescription.includes("CITI BIKE");
-        }
-
-        if (filters.metroCard && !shouldFilter && transaction.originalDescription) {
-            shouldFilter = transaction.originalDescription.includes("MTA*NYCT");
-        }
-
-        return !shouldFilter;
-    }
 
     const copyOutputTable = () => {
         copyTable('#output-data');
     }
 
     const [showFilters, setShowFilters] = useState<boolean>(false);
+
+    const toggleVisible = () => {
+        setShowFilters(!showFilters);
+    }
 
     const handleVisible = () => {
         if (!showFilters) {
@@ -106,6 +95,36 @@ export default function DataGridDemo({ rows }: TableProps) {
         }
     }
 
+    const applyFilters = (transaction: Transaction) => {
+        // Create combined list of filters from default filters and saved
+        
+        //Loop though each filter that is enabled and set shuouldFilter to 
+        for( let each of activeFilters){
+            const relevantValue = transaction[each.column]
+            if(!relevantValue){
+                // console.log("Missing Data Encountered")
+                return true;
+            }
+
+            if(each.exactMatch){
+                if(relevantValue === each.matchText){
+                    return false;
+                }
+            }else{
+                if(relevantValue.includes(each.matchText)){
+                    return false;
+                }
+            }
+        }
+        return true;
+  
+    }
+
+    const originalRows = useMemo( ()=> {
+        console.log("recalc og rows")
+        return (rows.filter(applyFilters))
+    },[activeFilters])
+
     return (<>
         <AddFilter />
         <Grid wrap="nowrap" container>
@@ -113,13 +132,11 @@ export default function DataGridDemo({ rows }: TableProps) {
                 <h2>Recent Transaction </h2>
                 <Grid style={{ padding: ".5em 0" }} container>
                     <div onMouseEnter={handleVisible} onMouseLeave={handleHide} style={{ position: "relative" }}>
-                        <Button style={{ textTransform: "capitalize" }} variant="outlined">Filters <KeyboardArrowDown /></Button>
+                        <Button onClick={toggleVisible} style={{ textTransform: "capitalize" }} variant="outlined">Filters <KeyboardArrowDown /></Button>
                         {showFilters && <div style={{ position: "absolute", bottom: "-250px", width: "300px", height: "250px", backgroundColor: "white", borderRadius: "10px", border: "solid 2px lightgray", zIndex: 2 }}>
-                            <p>Filters: </p>
-                            <button onClick={() => { setFilters({ ...filters, credits: !filters.credits }) }}>{filters.credits ? <Check /> : <Clear />}Credit Transactions</button>
-                            <button onClick={() => { setFilters({ ...filters, citiBike: !filters.citiBike }) }}>{filters.citiBike ? <Check /> : <Clear />}Citi Bikes</button>
-                            <button onClick={() => { setFilters({ ...filters, metroCard: !filters.metroCard }) }}>{filters.metroCard ? <Check /> : <Clear />}MetroCard</button>
-                            {/* <Filter filters={filters} setFilters={setFilters} type="metroCard" icon={<Subway />} text="Metro Card" /> */}
+                            {possibleFilters.map( f => {
+                                return <FilterButton filters={activeFilters} setFilters={setActiveFilters} filter={f} />
+                            })}
                         </div>}
                     </div>
                 </Grid>
@@ -127,7 +144,7 @@ export default function DataGridDemo({ rows }: TableProps) {
                     <DataGrid
                         hideFooterRowCount
                         hideFooterSelectedRowCount
-                        rows={rows.filter(applyFilters)}
+                        rows={originalRows}
                         columns={columns}
                         checkboxSelection
                         onRowClick={(stuff, event) => {
