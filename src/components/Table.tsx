@@ -16,6 +16,7 @@ import AddFilter from './AddFilter';
 import defaultFilters from '../utility/default-filters';
 import Filter from '../types/Filter';
 import FilterButton from './Filter'
+import FiltersList from './FilterList';
 
 const simpleColumns: GridColDef[] = [
     {
@@ -117,7 +118,6 @@ export default function DataGridDemo({ rows }: TableProps) {
             }
         }
         return true;
-  
     }
 
     const originalRows = useMemo( ()=> {
@@ -133,11 +133,7 @@ export default function DataGridDemo({ rows }: TableProps) {
                 <Grid style={{ padding: ".5em 0" }} container>
                     <div onMouseEnter={handleVisible} onMouseLeave={handleHide} style={{ position: "relative" }}>
                         <Button onClick={toggleVisible} style={{ textTransform: "capitalize" }} variant="outlined">Filters <KeyboardArrowDown /></Button>
-                        {showFilters && <div style={{ position: "absolute", bottom: "-250px", width: "300px", height: "250px", backgroundColor: "white", borderRadius: "10px", border: "solid 2px lightgray", zIndex: 2 }}>
-                            {possibleFilters.map( f => {
-                                return <FilterButton filters={activeFilters} setFilters={setActiveFilters} filter={f} />
-                            })}
-                        </div>}
+                        {showFilters && <FiltersList possible={possibleFilters} active={activeFilters} setActive={setActiveFilters}  />}
                     </div>
                 </Grid>
                 <div style={{ height: "100%" }} >

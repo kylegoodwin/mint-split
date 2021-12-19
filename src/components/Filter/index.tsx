@@ -1,3 +1,4 @@
+import Chip from '@material-ui/core/Chip'
 import { CheckCircle } from '@material-ui/icons'
 import Check from '@material-ui/icons/Check'
 import Clear from '@material-ui/icons/Clear'
@@ -13,26 +14,29 @@ interface Props {
 
 }
 
-export default function Filter({ filter, filters, setFilters, icon}: Props) {
+export default function Filter({ filter, filters, setFilters, icon }: Props) {
 
-    const active = !!filters.find(each =>{return Object.is(each,filter)})
+    const active = !!filters.find(each => { return Object.is(each, filter) })
 
     const handleClick = () => {
         let newFilters = [...filters];
-        let index = newFilters.findIndex(e => {return (e.matchText === filter.matchText && e.column === filter.column)})
+        let index = newFilters.findIndex(e => { return (e.matchText === filter.matchText && e.column === filter.column) })
 
-        if(index >= 0){
+        if (index >= 0) {
             console.log("found")
-            newFilters.splice(index,1)
-        }else{
+            newFilters.splice(index, 1)
+        } else {
             newFilters.push(filter)
         }
 
         setFilters(newFilters);
     }
 
-    return (<button className={classes.filter} onClick={handleClick}>
-        {active && <CheckCircle />}
-        {icon}{filter.title}
-        </button>)
+    return (<Chip
+        label={filter.title}
+        onClick={handleClick}
+        onDelete={handleClick}
+        deleteIcon={<Check />}
+        variant="outlined"
+    />)
 }
