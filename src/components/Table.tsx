@@ -3,11 +3,8 @@ import { DataGrid, GridColDef } from '@material-ui/data-grid';
 import Transaction from '../types/Transaction';
 import { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import "./Table.scss";
-import Check from '@material-ui/icons/Check';
-import Clear from '@material-ui/icons/Clear';
 import { copyTable } from '../utility/table-utilities';
-import { KeyboardArrowDown, Subway } from '@material-ui/icons';
+import { KeyboardArrowDown } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Clipboard from '@material-ui/icons/FileCopy'
 import { Box } from '@material-ui/core';
@@ -15,8 +12,8 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AddFilter from './AddFilter';
 import defaultFilters from '../utility/default-filters';
 import Filter from '../types/Filter';
-import FilterButton from './Filter'
 import FiltersList from './FilterList';
+import "./Table.scss";
 
 const simpleColumns: GridColDef[] = [
     {
@@ -25,11 +22,13 @@ const simpleColumns: GridColDef[] = [
         width: 150,
     },
     {
+        cellClassName: 'description',
         field: 'originalDescription',
         headerName: 'Description',
         width: 175,
         hideSortIcons: true,
-        disableReorder: true
+        disableReorder: true,
+        // valueFormatter: (params) => {return params.value ? params.value.toString() : "" }
     },
     {
         field: 'amount',
@@ -47,7 +46,6 @@ const columns: GridColDef[] = [
         type: 'string',
         width: 200,
     }
-
 ];
 
 type TableProps = {
@@ -142,6 +140,7 @@ export default function DataGridDemo({ rows }: TableProps) {
                 </Grid>
                 <div style={{ height: "100%" }} >
                     <DataGrid
+                        className="input-table"
                         hideFooterRowCount
                         hideFooterSelectedRowCount
                         rows={originalRows}

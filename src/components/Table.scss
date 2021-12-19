@@ -72,6 +72,8 @@
 
         tr td.description{
             width: 200px;
+            background-color: blue;
+            text-transform: capitalize;
         }
 
         tr th:last-of-type,
@@ -89,20 +91,3 @@
 #output-table tbody {
     display: block;
 }
-
-// #output-table thead, #output-table tbody{
-//     width: 100%;
-
-//     tr{
-//         width: 100%;
-//         display: flex;
-//     }
-
-//     tr th:first-of-type, tr td:first-of-type{
-//         flex: 1 1 0;
-//     }
-
-//     tr th:last-of-type, tr td:last-of-type{
-//         width: 200px;
-//     }
-// }

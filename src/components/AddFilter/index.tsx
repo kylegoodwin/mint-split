@@ -1,6 +1,8 @@
 import React from 'react';
-import { Dialog, Grid, IconButton, TextField } from "@material-ui/core";
+import { Box, Dialog, Grid, IconButton, TextField, Typography } from "@material-ui/core";
 import Clear from '@material-ui/icons/Clear';
+import classes from './styles.module.scss';
+
 
 interface Props {
     open: boolean,
@@ -33,12 +35,13 @@ export default function AddFilter({ open, setOpen }: Props) {
 
     return (
         <Dialog open={open} onClose={handleClose}>
-            <Grid justifyContent="flex-end" style={{ width: "100%" }}>
+            <div className={classes.container}>
+            <Grid className={classes.top} container wrap="nowrap" alignItems="center" justifyContent="space-between">
+                <Typography style={{fontSize: "1.5em"}} variant="h2">Add a New Filter</Typography>
                 <IconButton onClick={handleClose}>
                     <Clear />
                 </IconButton>
             </Grid>
-            <div>
                 <button onClick={getFilters}>Get Filters</button>
                 <form>
                     <TextField label="Title"></TextField>
@@ -47,7 +50,7 @@ export default function AddFilter({ open, setOpen }: Props) {
                     <br />
                 </form>
                 <button onClick={addFilter}>Submit</button>
-            </div>
+                </div>
         </Dialog>
     )
 }
