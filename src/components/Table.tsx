@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import { DataGrid, GridColDef } from '@material-ui/data-grid';
 import Transaction from '../types/Transaction';
 import { useState } from 'react';
@@ -57,9 +57,11 @@ interface BoolMap { [key: string]: boolean }
 
 export default function DataGridDemo({ rows }: TableProps) {
 
+    const [showCreateFilter, setShowCreateFilter] = useState<boolean>(false);
+
     const [selectedRows, setSelectedRows] = useState<Transaction[]>([]);
     const [activeFilters, setActiveFilters] = useState<Filter[]>([]);
-    const [possibleFilters,setPossibleFilters] = useState<Filter[]>(defaultFilters);
+    const [possibleFilters, setPossibleFilters] = useState<Filter[]>(defaultFilters);
 
     const sortedSelectedRows = React.useMemo(() => {
         return (selectedRows.sort((a, b) => { return a.index - b.index }))
@@ -72,7 +74,6 @@ export default function DataGridDemo({ rows }: TableProps) {
         })
         return total;
     }
-
 
     const copyOutputTable = () => {
         copyTable('#output-data');
@@ -98,21 +99,20 @@ export default function DataGridDemo({ rows }: TableProps) {
 
     const applyFilters = (transaction: Transaction) => {
         // Create combined list of filters from default filters and saved
-        
         //Loop though each filter that is enabled and set shuouldFilter to 
-        for( let each of activeFilters){
+        for (let each of activeFilters) {
             const relevantValue = transaction[each.column]
-            if(!relevantValue){
+            if (!relevantValue) {
                 // console.log("Missing Data Encountered")
                 return true;
             }
 
-            if(each.exactMatch){
-                if(relevantValue === each.matchText){
+            if (each.exactMatch) {
+                if (relevantValue === each.matchText) {
                     return false;
                 }
-            }else{
-                if(relevantValue.includes(each.matchText)){
+            } else {
+                if (relevantValue.includes(each.matchText)) {
                     return false;
                 }
             }
@@ -120,20 +120,24 @@ export default function DataGridDemo({ rows }: TableProps) {
         return true;
     }
 
-    const originalRows = useMemo( ()=> {
-        console.log("recalc og rows")
+    const originalRows = useMemo(() => {
         return (rows.filter(applyFilters))
-    },[activeFilters])
+    }, [activeFilters])
 
     return (<>
-        <AddFilter />
+        <AddFilter open={showCreateFilter} setOpen={setShowCreateFilter} />
         <Grid wrap="nowrap" container>
             <div style={{ height: 700, flexGrow: 1 }}>
                 <h2>Recent Transaction </h2>
                 <Grid style={{ padding: ".5em 0" }} container>
                     <div onMouseEnter={handleVisible} onMouseLeave={handleHide} style={{ position: "relative" }}>
                         <Button onClick={toggleVisible} style={{ textTransform: "capitalize" }} variant="outlined">Filters <KeyboardArrowDown /></Button>
-                        {showFilters && <FiltersList possible={possibleFilters} active={activeFilters} setActive={setActiveFilters}  />}
+                        {showFilters && <FiltersList
+                            possible={possibleFilters}
+                            active={activeFilters}
+                            setActive={setActiveFilters}
+                            setShowAddFilter={setShowCreateFilter}
+                        />}
                     </div>
                 </Grid>
                 <div style={{ height: "100%" }} >
