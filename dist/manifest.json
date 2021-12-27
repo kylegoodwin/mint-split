@@ -19,7 +19,9 @@
         "128": "icon128.png"
     },
     "permissions": [
-        "storage"
+        "storage",
+        "https://mint.intuit.com/transactionDownload.event*"
+        
       ],
     "options_page": "options.html"
 }
